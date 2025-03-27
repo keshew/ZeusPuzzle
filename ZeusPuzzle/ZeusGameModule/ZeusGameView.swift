@@ -1081,20 +1081,89 @@ class ZeusGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func createMainView() {
+        let gameBackground = SKSpriteNode(imageNamed: ZeusImageName.gameBackground.rawValue)
+        gameBackground.size = CGSize(width: size.width, height: size.height)
+        gameBackground.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        addChild(gameBackground)
+        
+        let topShadow = SKSpriteNode(imageNamed: ZeusImageName.topShadow.rawValue)
+        topShadow.size = CGSize(width: size.width, height: size.height * 0.3)
+        topShadow.position = CGPoint(x: size.width / 2, y: size.height / 1.17)
+        addChild(topShadow)
+        
+        let bottomShadow = SKSpriteNode(imageNamed: ZeusImageName.bottomShadow.rawValue)
+        bottomShadow.size = CGSize(width: size.width, height: size.height * 0.3)
+        bottomShadow.position = CGPoint(x: size.width / 2, y: size.height / 7)
+        addChild(bottomShadow)
+        
+        let timeBack = SKSpriteNode(imageNamed: ZeusImageName.timeBack.rawValue)
+        timeBack.size = CGSize(width: size.width * 0.4, height: size.height * 0.07)
+        timeBack.position = CGPoint(x: size.width / 1.3, y: size.height / 1.32)
+        addChild(timeBack)
+        
+        let timeLabel = SKLabelNode(fontNamed: "BowlbyOneSC-Regular")
+        timeLabel.attributedText = NSAttributedString(string: "TIME", attributes: [
+            NSAttributedString.Key.font: UIFont(name: "Unlock-Regular", size: size.width * 0.049)!,
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.strokeColor: UIColor(red: 122/255, green: 92/255, blue: 8/255, alpha: 1),
+            NSAttributedString.Key.strokeWidth: -5
+        ])
+        timeLabel.position = CGPoint(x: size.width / 1.3, y: size.height / 1.26)
+        addChild(timeLabel)
+        
+        let desc = SKSpriteNode(imageNamed: ZeusImageName.desc.rawValue)
+        if size.width > 1000 {
+            desc.xScale = 0.8
+            desc.yScale = 0.77
+        } else if size.width > 450 {
+            desc.xScale = 0.7
+            desc.yScale = 0.67
+        } else if size.width > 350, size.width < 380 {
+            desc.setScale(0.35)
+        } else {
+            desc.setScale(0.38)
+        }
+        desc.position = CGPoint(x: size.width / 2, y: size.height / 2.3)
+        addChild(desc)
+    }
+    
     func createGrid() {
         if level > 0, level <= 4 {
             gridSize = 4
-            let puzzleSize = size.width * 0.15
+            var puzzleSize = size.width * 0.15
             let puzzleImages = returnAllPuzzles()
             for row in 0..<gridSize {
                 var puzzleRow: [SKSpriteNode] = []
                 for column in 0..<gridSize {
                     let puzzle = SKSpriteNode(imageNamed: puzzleImages[row * gridSize + column])
-                    puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
-                    puzzle.position = CGPoint(
-                        x: CGFloat(column) * (puzzleSize + 20) + puzzleSize * 1.35,
-                        y: CGFloat(row) * (puzzleSize + 20) + puzzleSize / 0.233
-                    )
+                    if size.width > 1000 {
+                        puzzleSize = size.width * 0.14
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 20) + puzzleSize * 1.82,
+                            y: CGFloat(row) * (puzzleSize + 20) + puzzleSize / 0.41
+                        )
+                    } else if size.width > 450, size.width < 1000 {
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 20) + puzzleSize * 1.58,
+                            y: CGFloat(row) * (puzzleSize + 20) + puzzleSize / 0.405
+                        )
+                    } else if size.width > 350, size.width < 380 {
+                            puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                            puzzle.position = CGPoint(
+                                x: CGFloat(column) * (puzzleSize + 20) + puzzleSize * 1.35,
+                                y: CGFloat(row) * (puzzleSize + 20) + puzzleSize / 0.32
+                            )
+                    } else {
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 20) + puzzleSize * 1.35,
+                            y: CGFloat(row) * (puzzleSize + 20) + puzzleSize / 0.233
+                        )
+                    }
+                  
                     puzzle.name = "\(puzzleImages[row * gridSize + column])"
                     let border = SKShapeNode(rectOf: CGSize(width: puzzleSize, height: puzzleSize))
                     border.strokeColor = .white
@@ -1111,17 +1180,40 @@ class ZeusGameSpriteKit: SKScene, SKPhysicsContactDelegate {
             updateBordersForCorrectPositions()
         } else if level > 4, level <= 8 {
             gridSize = 6
-            let puzzleSize = size.width * 0.1
+            var puzzleSize = size.width * 0.1
             let puzzleImages = returnAllPuzzles()
             for row in 0..<gridSize {
                 var puzzleRow: [SKSpriteNode] = []
                 for column in 0..<gridSize {
                     let puzzle = SKSpriteNode(imageNamed: puzzleImages[row * gridSize + column])
-                    puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
-                    puzzle.position = CGPoint(
-                        x: CGFloat(column) * (puzzleSize + 15) + puzzleSize * 1.6,
-                        y: CGFloat(row) * (puzzleSize + 15) + puzzleSize / 0.165
-                    )
+                    if size.width > 1000 {
+                        puzzleSize = size.width * 0.095
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 15) + puzzleSize * 2.35,
+                            y: CGFloat(row) * (puzzleSize + 15) + puzzleSize / 0.31
+                        )
+                    } else if size.width > 450, size.width < 1000 {
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 15) + puzzleSize * 2.05,
+                            y: CGFloat(row) * (puzzleSize + 15) + puzzleSize / 0.297
+                        )
+                    } else if size.width > 350, size.width < 380 {
+                        puzzleSize = size.width * 0.095
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 15) + puzzleSize * 1.7,
+                            y: CGFloat(row) * (puzzleSize + 15) + puzzleSize / 0.218
+                        )
+                    } else {
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 15) + puzzleSize * 1.6,
+                            y: CGFloat(row) * (puzzleSize + 15) + puzzleSize / 0.165
+                        )
+                    }
+                    
                     puzzle.name = "\(puzzleImages[row * gridSize + column])"
                     let border = SKShapeNode(rectOf: CGSize(width: puzzleSize, height: puzzleSize))
                     border.strokeColor = .white
@@ -1138,17 +1230,40 @@ class ZeusGameSpriteKit: SKScene, SKPhysicsContactDelegate {
             updateBordersForCorrectPositions()
         } else if level > 8, level <= 12 {
             gridSize = 8
-            let puzzleSize = size.width * 0.075
+            var puzzleSize = size.width * 0.075
             let puzzleImages = returnAllPuzzles()
             for row in 0..<gridSize {
                 var puzzleRow: [SKSpriteNode] = []
                 for column in 0..<gridSize {
                     let puzzle = SKSpriteNode(imageNamed: puzzleImages[row * gridSize + column])
-                    puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
-                    puzzle.position = CGPoint(
-                        x: CGFloat(column) * (puzzleSize + 10) + puzzleSize * 2,
-                        y: CGFloat(row) * (puzzleSize + 10) + puzzleSize / 0.125
-                    )
+                    if size.width > 1000 {
+                        puzzleSize = size.width * 0.073
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 10) + puzzleSize * 2.755,
+                            y: CGFloat(row) * (puzzleSize + 10) + puzzleSize / 0.25
+                        )
+                    } else if size.width > 450, size.width < 1000 {
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 10) + puzzleSize * 2.55,
+                            y: CGFloat(row) * (puzzleSize + 10) + puzzleSize / 0.23
+                        )
+                    } else if size.width > 350, size.width < 380 {
+                        puzzleSize = size.width * 0.07
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 10) + puzzleSize * 2.3,
+                            y: CGFloat(row) * (puzzleSize + 10) + puzzleSize / 0.16
+                        )
+                    } else {
+                        puzzle.size = CGSize(width: puzzleSize, height: puzzleSize)
+                        puzzle.position = CGPoint(
+                            x: CGFloat(column) * (puzzleSize + 10) + puzzleSize * 2,
+                            y: CGFloat(row) * (puzzleSize + 10) + puzzleSize / 0.125
+                        )
+                    }
+                 
                     puzzle.name = "\(puzzleImages[row * gridSize + column])"
                     let border = SKShapeNode(rectOf: CGSize(width: puzzleSize, height: puzzleSize))
                     border.strokeColor = .white
@@ -1262,6 +1377,72 @@ class ZeusGameSpriteKit: SKScene, SKPhysicsContactDelegate {
         correctPuzzleArrangement = returnRightPuzzles()
         createGrid()
     }
+    
+    func createTappedView() {
+        let pauseButton = SKSpriteNode(imageNamed: ZeusImageName.pauseButton.rawValue)
+        pauseButton.size = CGSize(width: size.width * 0.15, height: size.width * 0.15)
+        pauseButton.name = "pause"
+        pauseButton.position = CGPoint(x: size.width / 8, y: size.height / 1.12)
+        addChild(pauseButton)
+        
+        let rulesButton = SKSpriteNode(imageNamed: ZeusImageName.rulesButton.rawValue)
+        rulesButton.size = CGSize(width: size.width * 0.15, height: size.width * 0.15)
+        rulesButton.name = "rules"
+        rulesButton.position = CGPoint(x: size.width / 1.15, y: size.height / 1.12)
+        addChild(rulesButton)
+        
+        let bonusButton = SKSpriteNode(imageNamed: ZeusImageName.timeBonusCount.rawValue)
+        bonusButton.size = CGSize(width: size.width * 0.256, height: size.height * 0.094)
+        bonusButton.name = "bonusButton"
+        bonusButton.position = CGPoint(x: size.width / 4, y: size.height / 10)
+        addChild(bonusButton)
+        
+        let bonusClueButton = SKSpriteNode(imageNamed: ZeusImageName.clueBonusCount.rawValue)
+        bonusClueButton.size = CGSize(width: size.width * 0.256, height: size.height * 0.094)
+        bonusClueButton.name = "bonusClueButton"
+        bonusClueButton.position = CGPoint(x: size.width / 1.35, y: size.height / 10)
+        addChild(bonusClueButton)
+        
+        let bonusClue = SKLabelNode(fontNamed: "BowlbyOneSC-Regular")
+        bonusClue.attributedText = NSAttributedString(string: "ANCIENT HINT", attributes: [
+            NSAttributedString.Key.font: UIFont(name: "Unlock-Regular", size: size.width * 0.041)!,
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.strokeColor: UIColor(red: 122/255, green: 92/255, blue: 8/255, alpha: 1),
+            NSAttributedString.Key.strokeWidth: -3
+        ])
+        bonusClue.position = CGPoint(x: size.width / 1.35, y: size.height / 33)
+        addChild(bonusClue)
+        
+        bonusClueCount = SKLabelNode(fontNamed: "BowlbyOneSC-Regular")
+        bonusClueCount.attributedText = NSAttributedString(string: "\(UserDefaultsManager.defaults.object(forKey: Keys.clueCount.rawValue) ?? 0)", attributes: [
+            NSAttributedString.Key.font: UIFont(name: "Unlock-Regular", size: size.width * 0.066)!,
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.strokeColor: UIColor(red: 122/255, green: 92/255, blue: 8/255, alpha: 1),
+            NSAttributedString.Key.strokeWidth: -3
+        ])
+        bonusClueCount.position = CGPoint(x: size.width / 1.505, y: size.height / 14.8)
+        addChild(bonusClueCount)
+        
+        let bonusTime = SKLabelNode(fontNamed: "BowlbyOneSC-Regular")
+        bonusTime.attributedText = NSAttributedString(string: "ADDITIONAL TIME", attributes: [
+            NSAttributedString.Key.font: UIFont(name: "Unlock-Regular", size: size.width * 0.041)!,
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.strokeColor: UIColor(red: 122/255, green: 92/255, blue: 8/255, alpha: 1),
+            NSAttributedString.Key.strokeWidth: -3
+        ])
+        bonusTime.position = CGPoint(x: size.width / 4.0, y: size.height / 33)
+        addChild(bonusTime)
+        
+        bonusTimeCount = SKLabelNode(fontNamed: "BowlbyOneSC-Regular")
+        bonusTimeCount.attributedText = NSAttributedString(string: "\(UserDefaultsManager.defaults.object(forKey: Keys.timeCount.rawValue) ?? 0)", attributes: [
+            NSAttributedString.Key.font: UIFont(name: "Unlock-Regular", size: size.width * 0.066)!,
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.strokeColor: UIColor(red: 122/255, green: 92/255, blue: 8/255, alpha: 1),
+            NSAttributedString.Key.strokeWidth: -3
+        ])
+        bonusTimeCount.position = CGPoint(x: size.width / 3.07, y: size.height / 14.5)
+        addChild(bonusTimeCount)
+    }
 }
 struct ZeusGameView: View {
     @StateObject var zeusGameModel =  ZeusGameViewModel()
@@ -1297,6 +1478,6 @@ struct ZeusGameView: View {
 }
 
 #Preview {
-    ZeusGameView(level: 1)
+    ZeusGameView(level: 12)
 }
 
